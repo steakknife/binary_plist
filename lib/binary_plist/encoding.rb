@@ -1,5 +1,4 @@
 # encoding: ascii
-require 'iconv'
 require 'date'
 
 module BinaryPlist
@@ -65,11 +64,11 @@ module BinaryPlist
     end
 
     private
-      
+
       def self.ic string
-        Iconv.iconv(PLIST_TEXT_ENCODING, INPUT_TEXT_ENCODING, string)
-        @@ic ||= Iconv.new(PLIST_TEXT_ENCODING, INPUT_TEXT_ENCODING)
-        @@ic.iconv(string + ' ')[0..-3]
+        "#{string} ".encode(
+          Encoding::Converter.asciicompat_encoding(PLIST_TEXT_ENCODING),
+          Encoding::Converter.asciicompat_encoding(INPUT_TEXT_ENCODING))[0..-3]
       end
 
       def self.count_objects object
